@@ -1,0 +1,4 @@
+k3d 5.5.2
+helm 3.12.3
+kubectl 1.28.0
+terraform 1.5.5

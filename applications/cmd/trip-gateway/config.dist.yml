@@ -1,0 +1,12 @@
+env: dev
+
+app_project: codetalks
+app_family: demo
+app_group: terminal-trips
+app_name: gateway
+
+stream:
+  output:
+    trips:
+      type: sqs
+      queue_id: trips

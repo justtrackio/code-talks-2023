@@ -1,0 +1,67 @@
+namespace: monitoring
+resources:
+  - datasources
+helmCharts:
+  - name: kube-prometheus-stack
+    includeCRDs: true
+    releaseName: kube-prometheus-stack
+    namespace: monitoring
+    version: 48.3.1
+    repo: https://prometheus-community.github.io/helm-charts
+    valuesInline:
+      alertmanager:
+        enabled: false
+      prometheusOperator:
+        tls:
+          enabled: false
+      prometheus:
+        ingress:
+          enabled: true
+          annotations:
+            traefik.ingress.kubernetes.io/router.entrypoints: web
+          hosts:
+            - prometheus-127.0.0.1.nip.io
+        prometheusSpec:
+          externalUrl: http://prometheus-127.0.0.1.nip.io:8081
+          podMonitorSelectorNilUsesHelmValues: false
+          resources:
+            requests:
+              cpu: "1"
+              memory: "4Gi"
+          ruleSelectorNilUsesHelmValues: false
+          serviceMonitorSelectorNilUsesHelmValues: false
+          storageSpec:
+            volumeClaimTemplate:
+              spec:
+                accessModes: [ "ReadWriteOnce" ]
+                resources:
+                  requests:
+                    storage: 4Gi
+      kubeControllerManager:
+        enabled: false
+      kubeScheduler:
+        enabled: false
+      kubeProxy:
+        enabled: false
+      grafana:
+        sidecar:
+          dashboards:
+            searchNamespace: ALL
+            provider:
+              foldersFromFilesStructure: true
+        ingress:
+          enabled: true
+          annotations:
+            traefik.ingress.kubernetes.io/router.entrypoints: web
+          hosts:
+            - grafana-127.0.0.1.nip.io
+        grafana.ini:
+          server:
+            root_url: "http://grafana-127.0.0.1.nip.io:8081"
+          dataproxy:
+            max_idle_connections: 500
+        persistence:
+          enabled: true
+        plugins:
+          - grafana-piechart-panel
+          - grafana-sentry-datasource

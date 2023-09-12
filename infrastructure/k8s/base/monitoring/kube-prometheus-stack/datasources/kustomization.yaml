@@ -1,0 +1,10 @@
+commonLabels:
+  grafana_datasource: "1"
+
+commonAnnotations:
+  grafana_datasource: "1"
+
+configMapGenerator:
+  - name: datasources
+    files:
+      - configmap.yaml

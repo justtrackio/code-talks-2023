@@ -1,0 +1,7 @@
+{
+  "attributes": {
+    "encoding": "application/json",
+    "logger:context": "{\"trip_uuid\":\"845bab3d-8af9-43cb-80a6-b704a04c87ed\"}"
+  },
+  "body": "{\"uuid\":\"845bab3d-8af9-43cb-80a6-b704a04c87ed\",\"VendorID\":2,\"tpep_pickup_datetime\":\"2023-03-01 00:06:43\",\"tpep_dropoff_datetime\":\"2023-03-01 00:16:43\",\"passenger_count\":1,\"trip_distance\":0,\"total_amount\":11.1}"
+}

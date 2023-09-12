@@ -1,0 +1,6 @@
+resources:
+  - operators
+  - elastic
+  - fluentd
+  - logging
+  - monitoring

@@ -1,0 +1,10 @@
+env: dev
+
+app_project: codetalks
+app_family: demo
+app_group: terminal-trips
+app_name: forwarder
+
+forwarder:
+  gateway_url: http://localhost:8080/trip
+  path: trips-short.json

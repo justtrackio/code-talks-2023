@@ -1,0 +1,25 @@
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: kibana
+spec:
+  config:
+    server.publicBaseUrl: http://kibana-127.0.0.1.nip.io:8081
+  http:
+    service:
+      metadata:
+        name: kibana-kb-http
+    tls:
+      selfSignedCertificate:
+        disabled: true
+  version: 8.8.0
+  count: 1
+  elasticsearchRef:
+    name: elasticsearch
+  podTemplate:
+    spec:
+      containers:
+        - name: kibana
+          resources:
+            limits:
+              memory: 4Gi
