@@ -1,0 +1,20 @@
+env: dev
+
+app_project: codetalks
+app_family: demo
+app_group: terminal-trips
+app_name: consumer
+
+fixtures:
+  enabled: true
+
+stream:
+  input:
+    consumer:
+      type: sqs
+      target_queue_id: trips
+
+test:
+  components:
+    ddb:
+      default:

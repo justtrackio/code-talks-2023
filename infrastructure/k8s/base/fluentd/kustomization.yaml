@@ -1,0 +1,121 @@
+namespace: fluentd
+resources:
+  - namespace.yaml
+helmCharts:
+  - name: fluentd
+    includeCRDs: false
+    releaseName: fluentd
+    namespace: fluentd
+    version: 0.4.3
+    repo: https://fluent.github.io/helm-charts
+    valuesInline:
+      rbac:
+        create: true
+      metrics:
+        serviceMonitor:
+          enabled: true
+      service:
+        ports:
+          - name: forward
+            containerPort: 15000
+            protocol: TCP
+      fileConfigs:
+        01_sources.conf: |-
+        02_filters.conf: |-
+        03_dispatch.conf: |-
+        04_outputs.conf: |-
+        all.conf: |-
+          <system>
+            #log_level debug
+          </system>
+
+          <source>
+            @type prometheus
+            @id in_prometheus
+            bind "0.0.0.0"
+            port 24231
+            metrics_path "/metrics"
+          </source>
+          
+          <source>
+            @type forward
+            port 15000
+          </source>
+  
+          <filter **>
+              @type record_transformer
+              <record>
+                  fluentd_hostname "#{Socket.gethostname}"
+                  tag ${tag}
+              </record>
+          </filter>
+  
+          <filter **>
+            @type prometheus
+            <metric>
+              name fluentd_input_status_num_records_total
+              type counter
+              desc The total number of incoming records
+              <labels>
+                tag ${tag}
+                hostname ${hostname}
+              </labels>
+            </metric>
+          </filter>
+  
+          <filter **>
+            @type             dedot
+            de_dot            true
+            de_dot_separator  _
+            de_dot_nested     true
+          </filter>
+  
+          <match **>
+            @type copy
+  
+            <store ignore_error>
+              <buffer tag>
+                @type file
+                chunk_limit_size 5M
+                flush_at_shutdown true
+                flush_interval 5s
+                flush_mode interval
+                flush_thread_count 8
+                overflow_action drop_oldest_chunk
+                path /fluentd/log/elastic-buffer
+                retry_max_interval 30
+                retry_max_times 100
+                retry_timeout 1h
+                total_limit_size 2G
+              </buffer>
+              @type elasticsearch_data_stream
+              host "elasticsearch-es-http.elastic"
+              port 9200
+              data_stream_name logs-${tag}
+              data_stream_template_name logs-template
+              template_overwrite false
+              data_stream_ilm_name logs-template
+              data_stream_ilm_policy_overwrite false
+              max_retry_putting_template 3 # defaults to 10
+              fail_on_putting_template_retry_exceed false
+              flush_interval 5s
+              reconnect_on_error true
+              reload_connections false
+              reload_on_failure true
+              request_timeout 20s
+              suppress_type_name true
+            </store>
+  
+            <store>
+              @type prometheus
+              <metric>
+                name fluentd_output_status_num_records_total
+                type counter
+                desc The total number of outgoing records
+                <labels>
+                  tag ${tag}
+                  hostname ${hostname}
+                </labels>
+              </metric>
+            </store>
+          </match>

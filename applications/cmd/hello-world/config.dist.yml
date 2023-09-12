@@ -1,0 +1,8 @@
+env: dev
+
+app_project: codetalks
+app_family: demo
+app_group: hello-world
+app_name: printer
+
+ticker_interval: 1s

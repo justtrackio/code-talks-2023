@@ -1,0 +1,11 @@
+.idea
+applications/**/*.json
+volumes
+terraform.tfstate
+terraform.tfstate.backup
+.terraform.lock.hcl
+.terraform.tfstate.lock.info
+.terraform/
+charts
+/.envrc
+!/applications/message_example.json

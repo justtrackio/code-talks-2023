@@ -1,0 +1,10 @@
+export AWS_ACCOUNT_ID=1234567890
+export AWS_PROFILE="${AWS_ACCOUNT_ID}:AWSAdministratorAccess"
+
+source .envrc-aws
+
+export TF_VAR_aws_account_id=${AWS_ACCOUNT_ID}
+export TF_VAR_aws_profile=${AWS_PROFILE}
+export TF_VAR_aws_access_key_id="${AWS_ACCESS_KEY_ID}"
+export TF_VAR_aws_secret_access_key="${AWS_SECRET_ACCESS_KEY}"
+export TF_VAR_aws_session_token="${AWS_SESSION_TOKEN}"

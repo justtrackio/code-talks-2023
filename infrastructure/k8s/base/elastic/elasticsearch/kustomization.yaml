@@ -1,0 +1,3 @@
+resources:
+  - elasticsearch.yaml
+  - ingress.yaml
