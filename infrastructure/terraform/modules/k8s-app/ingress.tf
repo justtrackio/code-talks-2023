@@ -31,10 +31,9 @@ resource "kubernetes_ingress_v1" "this" {
   }
   spec {
     rule {
-      host = "${module.this.id}-${each.key}.127.0.0.1.nip.io"
       http {
         path {
-          path = "/"
+          path = "/trip"
           backend {
             service {
               name = kubernetes_service.service.metadata.0.name

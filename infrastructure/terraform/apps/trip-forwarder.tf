@@ -13,6 +13,6 @@ module "k8s_app_trip_forwarder" {
   volume_container_path = "/input"
   env_vars = {
     FORWARDER_PATH        = "/input/trips.json"
-    FORWARDER_GATEWAY_URL = "http://terminal-trips-gateway.codetalks:8080/trip"
+    FORWARDER_GATEWAY_URL = "http://traefik.kube-system/trip"
   }
 }
